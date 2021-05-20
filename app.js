@@ -30,8 +30,11 @@ var server = http.createServer(function(request, response){
     }
     // request didn't match anything:
     else{
-        response.writeHead(404);
-        response.end('File not found!!!');
+        fs.readFile('404.html', 'utf8', function (errors, contents){
+            response.writeHead(404, {'Content-type': 'text/html'});
+            response.write(contents); 
+            response.end();
+        });
     }
 });
 // tell your server which port to run on
