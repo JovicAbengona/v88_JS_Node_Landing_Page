@@ -4,38 +4,30 @@ var http = require('http');
 var fs = require('fs');
 // creating a server using http module:
 var server = http.createServer(function(request, response){
+    // default readfile for fs
+    let readFile   = "404.html";
+    let statusCode = 404;
     // see what URL the clients are requesting:
     console.log('client request URL: ', request.url);
     // this is how we do routing:
-    if(request.url === '/'){
-        fs.readFile('index.html', 'utf8', function(errors, contents){
-            response.writeHead(200, {'Content-Type': 'text/html'});  // send data about response
-            response.write(contents);  //  send response body
-            response.end(); // finished!
-        });
+    if(request.url === "/"){
+        readFile   = "index.html";
+        statusCode = 200;
     }
     else if(request.url === "/ninjas"){
-        fs.readFile('ninjas.html', 'utf8', function (errors, contents){
-            response.writeHead(200, {'Content-type': 'text/html'});
-            response.write(contents); 
-            response.end();
-        });
+        readFile   = "ninjas.html";
+        statusCode = 200;
     }
     else if(request.url === "/ninjas/new"){
-        fs.readFile('new_ninjas.html', 'utf8', function (errors, contents){
-            response.writeHead(200, {'Content-type': 'text/html'});
-            response.write(contents); 
-            response.end();
-        });
+        readFile   = "new_ninjas.html";
+        statusCode = 200;
     }
-    // request didn't match anything:
-    else{
-        fs.readFile('404.html', 'utf8', function (errors, contents){
-            response.writeHead(404, {'Content-type': 'text/html'});
-            response.write(contents); 
-            response.end();
-        });
-    }
+
+    fs.readFile(readFile, 'utf8', function (errors, contents){
+        response.writeHead(statusCode, {'Content-type': 'text/html'});
+        response.write(contents); 
+        response.end();
+    });
 });
 // tell your server which port to run on
 server.listen(6789);
